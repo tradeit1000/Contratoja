@@ -1,26 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function SuccessContent() {
-  const params = useSearchParams();
   const router = useRouter();
   const [contract, setContract] = useState("");
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
     const key = params.get("key");
     if (key) {
       const saved = sessionStorage.getItem(key);
       if (saved) setContract(saved);
     }
-  }, [params]);
+  }, []);
 
   return (
     <div style={{ minHeight: "100vh", background: "#0d1117", fontFamily: "Georgia, serif", color: "#e8e0d0", padding: "40px 24px" }}>
       <style>{`
         .btn-gold { background: linear-gradient(135deg, #c9a84c, #e8c96a); color: #0d1117; border: none; padding: 13px 32px; font-weight: 600; font-size: 15px; cursor: pointer; }
         .btn-ghost { background: transparent; color: #8a7f6e; border: 1px solid #2a2a2a; padding: 11px 28px; cursor: pointer; }
-        .btn-ghost:hover { color: #e8e0d0; }
         @media print { .no-print { display: none !important; } }
       `}</style>
       <div style={{ maxWidth: 780, margin: "0 auto" }}>
