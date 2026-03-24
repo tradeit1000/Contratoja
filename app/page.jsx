@@ -181,7 +181,7 @@ export default function Home() {
             <button className="btn-gold" onClick={() => setStep("type")} style={{ fontSize: 16, padding: "16px 48px", marginBottom: 16 }}>
               Criar Contrato Grátis →
             </button>
-            <p style={{ fontSize: 13, color: "#333", fontFamily: "'Crimson Pro',serif" }}>
+            <p style={{ fontSize: 13, color: "#aaa", fontFamily: "'Crimson Pro',serif" }}>
               1 contrato grátis · depois 2,99€/doc ou 7,99€/mês ilimitado
             </p>
             <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 64, flexWrap: "wrap" }}>
@@ -303,7 +303,7 @@ export default function Home() {
       </main>
 
       <footer style={{ borderTop: "1px solid #1a1a1a", padding: "24px 40px", textAlign: "center" }}>
-        <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 13, color: "#2a2a2a" }}>
+        <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 13, color: "#aaa" }}>
           ContratoJá © 2026 · geral@contratoja.pt · Os contratos gerados são para referência. Consulta um advogado para situações complexas.
         </p>
       </footer>
