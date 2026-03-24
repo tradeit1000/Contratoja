@@ -1,0 +1,38 @@
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export async function POST(req) {
+  try {
+    const { plan, storageKey } = await req.json();
+    const origin = req.headers.get("origin") || "http://localhost:3000";
+
+    const isSubscription = plan === "monthly";
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: isSubscription ? "subscription" : "payment",
+      locale: "pt",
+      line_items: [
+        {
+          price_data: isSubscription
+            ? undefined
+            : {
+                currency: "eur",
+                product_data: { name: "ContratoJá — Contrato Único" },
+                unit_amount: 299, // 2.99€
+              },
+          price: isSubscription ? process.env.STRIPE_MONTHLY_PRICE_ID : undefined,
+          quantity: 1,
+        },
+      ].filter(Boolean),
+      success_url: `${origin}/success?key=${storageKey}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/?cancelled=true`,
+    });
+
+    return Response.json({ url: session.url });
+  } catch (err) {
+    console.error(err);
+    return Response.json({ error: "Erro ao criar sessão de pagamento." }, { status: 500 });
+  }
+}
