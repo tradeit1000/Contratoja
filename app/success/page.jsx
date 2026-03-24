@@ -1,8 +1,9 @@
 "use client";
+import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function SuccessPage() {
+function SuccessContent() {
   const params = useSearchParams();
   const router = useRouter();
   const [contract, setContract] = useState("");
@@ -27,7 +28,6 @@ export default function SuccessPage() {
         .btn-ghost { background: transparent; color: #8a7f6e; border: 1px solid #2a2a2a; padding: 11px 28px; font-family: 'Crimson Pro', serif; cursor: pointer; transition: all 0.2s; }
         .btn-ghost:hover { color: #e8e0d0; border-color: #555; }
       `}</style>
-
       <div style={{ maxWidth: 780, margin: "0 auto" }}>
         <div className="no-print" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 40, flexWrap: "wrap", gap: 16 }}>
           <div>
@@ -42,7 +42,6 @@ export default function SuccessPage() {
             <button className="btn-ghost" onClick={() => router.push("/")}>+ Novo</button>
           </div>
         </div>
-
         <div style={{ background: "#0f1419", border: "1px solid #1e1e1e", padding: "48px 52px" }}>
           <pre style={{ fontFamily: "'Crimson Pro', serif", fontSize: 15, lineHeight: 1.9, color: "#d0c8b8", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
             {contract || "A carregar contrato..."}
@@ -50,5 +49,13 @@ export default function SuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div style={{ background: "#0d1117", minHeight: "100vh", color: "#e8e0d0", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "Georgia, serif", fontSize: 18 }}>A carregar...</div>}>
+      <SuccessContent />
+    </Suspense>
   );
 }
