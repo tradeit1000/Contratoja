@@ -304,7 +304,7 @@ export default function Home() {
 
       <footer style={{ borderTop: "1px solid #1a1a1a", padding: "24px 40px", textAlign: "center" }}>
         <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 13, color: "#2a2a2a" }}>
-          ContratoJá © 2026 · Os contratos gerados são para referência. Consulta um advogado para situações complexas.
+          ContratoJá © 2026 · geral@contratoja.pt · Os contratos gerados são para referência. Consulta um advogado para situações complexas.
         </p>
       </footer>
     </div>
