@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 "use client";
 import { useState, useEffect } from "react";
 
@@ -62,7 +63,7 @@ export default function Home() {
   const [selectedType, setSelectedType] = useState(null);
   const [formData, setFormData] = useState({});
   const [contract, setContract] = useState("");
-  const [loading, setLoading] = useState(loading);
+  const [loading, setLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [storageKey, setStorageKey] = useState(null);
 
