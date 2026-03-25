@@ -169,7 +169,7 @@ export default function Home() {
   const fields = selectedType ? FIELDS[selectedType] || [] : [];
   const allFilled = fields.every(f => formData[f.key]?.trim());
   const previewLines = contract.split("\n");
-  const cutoff = Math.floor(previewLines.length * 0.38);
+  const cutoff = Math.floor(previewLines.length * 0);
   const visibleLines = previewLines.slice(0, cutoff);
   const hiddenLines = previewLines.slice(cutoff);
 
@@ -247,7 +247,7 @@ export default function Home() {
               <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(36px,6vw,60px)", fontWeight: 700, lineHeight: 1.15, marginBottom: 24 }}>Contratos Profissionais<br /><span style={{ color: "#c9a84c" }}>em 30 segundos.</span></h1>
               <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 20, color: "#8a7f6e", maxWidth: 520, margin: "0 auto 48px", lineHeight: 1.7 }}>Gera contratos juridicamente sólidos para Portugal com IA. Sempre actualizados com a legislação em vigor. Sem advogados. Sem complicações.</p>
               <button className="btn-gold" onClick={() => setStep("type")} style={{ fontSize: 16, padding: "16px 48px", marginBottom: 16 }}>Criar Documento Grátis →</button>
-              <p style={{ fontSize: 13, color: "#aaa", fontFamily: "'Crimson Pro',serif" }}>1 documento grátis · depois 2,99€/doc ou 7,99€/mês ilimitado</p>
+              <p style={{ fontSize: 13, color: "#aaa", fontFamily: "'Crimson Pro',serif" }}>2,99€ por documento · ou 7,99€/mês ilimitado</p>
               <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 64, flexWrap: "wrap" }}>
                 {[["17", "Tipos de Documento"], ["30s", "Tempo de Geração"], ["100%", "Lei Portuguesa"]].map(([v, l]) => (
                   <div key={l}><div style={{ fontFamily: "'Playfair Display',serif", fontSize: 38, color: "#c9a84c", fontWeight: 700 }}>{v}</div><div style={{ fontFamily: "'Crimson Pro',serif", fontSize: 14, color: "#555", marginTop: 4 }}>{l}</div></div>
