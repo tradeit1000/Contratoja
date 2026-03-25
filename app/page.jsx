@@ -638,7 +638,7 @@ export default function Home() {
 
       <footer style={{ borderTop: "1px solid #1a1a1a", padding: "24px 40px", textAlign: "center" }}>
         <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 13, color: "#aaa" }}>
-          ContratoJá © 2026 · geral@contratoja.pt · {t.footer}
+          ContratoJá © 2026 · geral@contratoja.pt · <a href="https://instagram.com/contratoja.pt" target="_blank" style={{color:"#c9a84c", textDecoration:"none"}}>@contratoja.pt</a> · {t.footer}
         </p>
       </footer>
     </div>
