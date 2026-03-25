@@ -4,9 +4,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
   try {
-    const { plan, storageKey } = await req.json();
+    const { plan, docId } = await req.json();
     const origin = req.headers.get("origin") || "http://localhost:3000";
-
     const isSubscription = plan === "monthly";
 
     const session = await stripe.checkout.sessions.create({
@@ -14,19 +13,13 @@ export async function POST(req) {
       mode: isSubscription ? "subscription" : "payment",
       locale: "pt",
       line_items: [
-        {
-          price_data: isSubscription
-            ? undefined
-            : {
-                currency: "eur",
-                product_data: { name: "ContratoJá — Contrato Único" },
-                unit_amount: 299, // 2.99€
-              },
-          price: isSubscription ? process.env.STRIPE_MONTHLY_PRICE_ID : undefined,
-          quantity: 1,
-        },
-      ].filter(Boolean),
-      success_url: `${origin}/success?key=${storageKey}&session_id={CHECKOUT_SESSION_ID}`,
+        isSubscription
+          ? { price: process.env.STRIPE_MONTHLY_PRICE_ID, quantity: 1 }
+          : { price_data: { currency: "eur", product_data: { name: "ContratoJá — Documento Único" }, unit_amount: 299 }, quantity: 1 }
+      ],
+      // Pass docId in metadata so we can retrieve it after payment
+      metadata: { docId: docId || "" },
+      success_url: `${origin}/success?docId=${docId}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/?cancelled=true`,
     });
 

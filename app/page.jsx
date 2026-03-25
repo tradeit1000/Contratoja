@@ -161,40 +161,41 @@ export default function Home() {
   const [selectedType, setSelectedType] = useState(null);
   const [formData, setFormData] = useState({});
   const [contract, setContract] = useState("");
+  const [docId, setDocId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [storageKey, setStorageKey] = useState(null);
+
   const [activeGroup, setActiveGroup] = useState("Arrendamento");
 
   const fields = selectedType ? FIELDS[selectedType] || [] : [];
   const allFilled = fields.every(f => formData[f.key]?.trim());
   const previewLines = contract.split("\n");
-  const cutoff = Math.floor(previewLines.length * 0);
+  const cutoff = Math.floor(previewLines.length * 0.38);
   const visibleLines = previewLines.slice(0, cutoff);
   const hiddenLines = previewLines.slice(cutoff);
 
   const handleGenerate = async () => {
-    setLoading(true); setStep("result"); setContract("");
+    setLoading(true); setStep("result"); setContract(""); setDocId(null);
     try {
       const res = await fetch("/api/generate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: selectedType, fields: formData }) });
       const data = await res.json();
-      if (data.contract) { setContract(data.contract); const key = `cj_${Date.now()}`; sessionStorage.setItem(key, data.contract); setStorageKey(key); }
+      if (data.preview) { setContract(data.preview); setDocId(data.docId); }
       else setContract("Erro ao gerar. Tenta novamente.");
     } catch { setContract("Erro de ligação. Tenta novamente."); }
     setLoading(false);
   };
 
   const handleCheckout = async (plan) => {
-    if (!storageKey) return; setCheckoutLoading(true);
+    if (!docId) return; setCheckoutLoading(true);
     try {
-      const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan, storageKey }) });
+      const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan, docId }) });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
     } catch { alert("Erro ao processar pagamento."); }
     setCheckoutLoading(false);
   };
 
-  const reset = () => { setStep("home"); setSelectedType(null); setFormData({}); setContract(""); setStorageKey(null); };
+  const reset = () => { setStep("home"); setSelectedType(null); setFormData({}); setContract(""); setDocId(null); };
 
   return (
     <div style={{ minHeight: "100vh", background: "#0d1117", fontFamily: "'Georgia','Times New Roman',serif", color: "#e8e0d0" }}>
@@ -243,11 +244,11 @@ export default function Home() {
         {step === "home" && (
           <div className="fade-in">
             <div style={{ textAlign: "center", paddingTop: 80, paddingBottom: 64 }}>
-
+              <div style={{ display: "inline-block", background: "rgba(201,168,76,.1)", border: "1px solid rgba(201,168,76,.3)", padding: "6px 18px", fontSize: 12, letterSpacing: 2, color: "#c9a84c", fontFamily: "'Crimson Pro',serif", marginBottom: 32 }}>POWERED BY INTELIGÊNCIA ARTIFICIAL</div>
               <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(36px,6vw,60px)", fontWeight: 700, lineHeight: 1.15, marginBottom: 24 }}>Contratos Profissionais<br /><span style={{ color: "#c9a84c" }}>em 30 segundos.</span></h1>
               <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 20, color: "#8a7f6e", maxWidth: 520, margin: "0 auto 48px", lineHeight: 1.7 }}>Gera contratos juridicamente sólidos para Portugal com IA. Sempre actualizados com a legislação em vigor. Sem advogados. Sem complicações.</p>
-              <button className="btn-gold" onClick={() => setStep("type")} style={{ fontSize: 16, padding: "16px 48px", marginBottom: 16 }}>Criar Documento →</button>
-              <p style={{ fontSize: 13, color: "#aaa", fontFamily: "'Crimson Pro',serif" }}>2,99€/doc · 7,99€/mês ilimitado</p>
+              <button className="btn-gold" onClick={() => setStep("type")} style={{ fontSize: 16, padding: "16px 48px", marginBottom: 16 }}>Criar Documento Grátis →</button>
+              <p style={{ fontSize: 13, color: "#aaa", fontFamily: "'Crimson Pro',serif" }}>1 documento grátis · depois 2,99€/doc ou 7,99€/mês ilimitado</p>
               <div style={{ display: "flex", justifyContent: "center", gap: 48, marginTop: 64, flexWrap: "wrap" }}>
                 {[["17", "Tipos de Documento"], ["30s", "Tempo de Geração"], ["100%", "Lei Portuguesa"]].map(([v, l]) => (
                   <div key={l}><div style={{ fontFamily: "'Playfair Display',serif", fontSize: 38, color: "#c9a84c", fontWeight: 700 }}>{v}</div><div style={{ fontFamily: "'Crimson Pro',serif", fontSize: 14, color: "#555", marginTop: 4 }}>{l}</div></div>

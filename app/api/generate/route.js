@@ -1,6 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { Redis } from "@upstash/redis";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const redis = Redis.fromEnv();
 
 const TYPE_NAMES = {
   arrendamento: "Contrato de Arrendamento Habitacional",
@@ -49,38 +51,39 @@ export async function POST(req) {
     const fieldText = Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join("\n");
     const legalQuery = LEGAL_QUERIES[type] || `legislação ${typeName} Portugal 2024`;
 
+    // Step 1 — search for current legislation
     const searchResponse = await client.messages.create({
       model: "claude-sonnet-4-20250514",
       max_tokens: 1000,
       tools: [{ type: "web_search_20250305", name: "web_search" }],
-      messages: [{
-        role: "user",
-        content: `Pesquisa na web: "${legalQuery}". Resume em 3-5 pontos as regras legais mais importantes e actuais em Portugal para este tipo de documento. Sê conciso e preciso.`
-      }]
+      messages: [{ role: "user", content: `Pesquisa na web: "${legalQuery}". Resume em 3-5 pontos as regras legais mais importantes e actuais em Portugal para este tipo de documento. Sê conciso e preciso.` }]
     });
 
     const legalContext = searchResponse.content
-      .filter(block => block.type === "text")
-      .map(block => block.text)
-      .join("\n");
+      .filter(b => b.type === "text").map(b => b.text).join("\n");
 
+    // Step 2 — generate FULL contract
     const contractResponse = await client.messages.create({
       model: "claude-sonnet-4-20250514",
       max_tokens: 2000,
-      messages: [{
-        role: "user",
-        content: `Tens acesso à seguinte informação legal actualizada sobre ${typeName} em Portugal:\n\n${legalContext}\n\n---\n\nCom base nesta informação legal actualizada, gera um ${typeName} profissional e juridicamente correto em português europeu (Portugal), com os seguintes dados:\n\n${fieldText}\n\nO documento deve:\n- Respeitar a legislação portuguesa mais recente\n- Incluir todas as cláusulas essenciais, numeradas\n- Ter formato legal adequado\n- Incluir data em Lisboa e espaços para assinatura\n- Ser completo, formal e pronto a usar\n\nResponde apenas com o texto do documento, sem introdução nem explicações.`
-      }]
+      messages: [{ role: "user", content: `Tens acesso à seguinte informação legal actualizada sobre ${typeName} em Portugal:\n\n${legalContext}\n\n---\n\nCom base nesta informação legal actualizada, gera um ${typeName} profissional e juridicamente correto em português europeu (Portugal), com os seguintes dados:\n\n${fieldText}\n\nO documento deve:\n- Respeitar a legislação portuguesa mais recente\n- Incluir todas as cláusulas essenciais, numeradas\n- Ter formato legal adequado\n- Incluir data em Lisboa e espaços para assinatura\n- Ser completo, formal e pronto a usar\n\nResponde apenas com o texto do documento, sem introdução nem explicações.` }]
     });
 
-    const contract = contractResponse.content
-      .filter(block => block.type === "text")
-      .map(block => block.text)
-      .join("\n");
+    const fullContract = contractResponse.content
+      .filter(b => b.type === "text").map(b => b.text).join("\n");
 
-    return Response.json({ contract });
+    // Step 3 — store full contract in Upstash Redis (expires in 24h)
+    const docId = `doc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    await redis.set(docId, fullContract, { ex: 86400 });
+
+    // Step 4 — return only the preview (first 35% of lines)
+    const lines = fullContract.split("\n");
+    const cutoff = Math.max(4, Math.floor(lines.length * 0.35));
+    const preview = lines.slice(0, cutoff).join("\n");
+
+    return Response.json({ preview, docId });
   } catch (err) {
     console.error(err);
-    return Response.json({ error: "Erro ao gerar contrato." }, { status: 500 });
+    return Response.json({ error: "Erro ao gerar documento." }, { status: 500 });
   }
 }
