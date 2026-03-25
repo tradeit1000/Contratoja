@@ -243,7 +243,7 @@ export default function Home() {
         {step === "home" && (
           <div className="fade-in">
             <div style={{ textAlign: "center", paddingTop: 80, paddingBottom: 64 }}>
-              <div style={{ display: "inline-block", background: "rgba(201,168,76,.1)", border: "1px solid rgba(201,168,76,.3)", padding: "6px 18px", fontSize: 12, letterSpacing: 2, color: "#c9a84c", fontFamily: "'Crimson Pro',serif", marginBottom: 32 }}>POWERED BY INTELIGÊNCIA ARTIFICIAL</div>
+
               <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(36px,6vw,60px)", fontWeight: 700, lineHeight: 1.15, marginBottom: 24 }}>Contratos Profissionais<br /><span style={{ color: "#c9a84c" }}>em 30 segundos.</span></h1>
               <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 20, color: "#8a7f6e", maxWidth: 520, margin: "0 auto 48px", lineHeight: 1.7 }}>Gera contratos juridicamente sólidos para Portugal com IA. Sempre actualizados com a legislação em vigor. Sem advogados. Sem complicações.</p>
               <button className="btn-gold" onClick={() => setStep("type")} style={{ fontSize: 16, padding: "16px 48px", marginBottom: 16 }}>Criar Documento Grátis →</button>
