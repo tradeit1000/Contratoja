@@ -5,7 +5,7 @@ import { useState } from "react";
 // ── TRANSLATIONS ──────────────────────────────────────────────
 const T = {
   pt: {
-    tagline: "Contratos Profissionais",
+    tagline: "Contratos Sólidos",
     tagline2: "em 30 segundos.",
     sub: "Contratos gerados a partir da lei actual — DRE, acórdãos dos tribunais e Código Civil. Não são templates. São documentos com fontes jurídicas reais citadas.",
     cta: "Criar Documento →",
@@ -40,7 +40,7 @@ const T = {
     poweredBy: "POWERED BY INTELIGÊNCIA ARTIFICIAL",
   },
   en: {
-    tagline: "Professional Contracts",
+    tagline: "Solid Contracts",
     tagline2: "in 30 seconds.",
     sub: "Contracts generated from actual Portuguese law — Official Gazette, court rulings and Civil Code. Not templates. Real legal sources cited in every document.",
     cta: "Create Document →",
