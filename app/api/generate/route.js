@@ -45,63 +45,221 @@ const TYPE_NAMES = {
   }
 };
 
-const LEGAL_QUERIES = {
-  arrendamento: "legislação arrendamento urbano habitacional Portugal NRAU 2024",
-  arrendamento_curta: "arrendamento curta duração alojamento local Portugal lei 2024",
-  arrendamento_loja: "arrendamento comercial loja Portugal legislação 2024",
-  arrendamento_escritorio: "arrendamento escritório espaço comercial Portugal lei 2024",
-  arrendamento_armazem: "arrendamento armazém espaço industrial Portugal legislação 2024",
-  arrendamento_estacionamento: "arrendamento estacionamento garagem Portugal lei 2024",
-  prestacao: "contrato prestação serviços Portugal código civil 2024",
-  nda: "acordo confidencialidade NDA segredos comerciais Portugal 2024",
-  compra_venda: "contrato compra venda Portugal código civil 2024",
-  parceria: "contrato parceria comercial sociedades Portugal 2024",
-  trabalho: "código trabalho Portugal 2024 contrato trabalho",
-  recibo_renda: "recibo arrendamento requisitos legais Portugal 2024",
-  recibo_caucao: "caução arrendamento Portugal regras legais 2024",
-  declaracao_entrada: "declaração entrada inquilino arrendamento Portugal 2024",
-  declaracao_saida: "declaração saída inquilino arrendamento Portugal 2024",
-  resolucao_contrato: "resolução contrato arrendamento Portugal lei requisitos 2024",
-  pedido_caucao: "devolução caução arrendamento Portugal prazo lei 2024",
+// Legal sources per contract type
+const LEGAL_SOURCES = {
+  arrendamento: {
+    dre: "arrendamento urbano habitacional NRAU lei 6/2006",
+    dgsi: "acórdão arrendamento habitacional NRAU inquilino senhorio",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  arrendamento_curta: {
+    dre: "alojamento local decreto lei 128/2014 arrendamento turístico",
+    dgsi: "acórdão alojamento local arrendamento turístico",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=2082&tabela=leis",
+  },
+  arrendamento_loja: {
+    dre: "arrendamento comercial não habitacional NRAU lei 6/2006",
+    dgsi: "acórdão arrendamento comercial loja estabelecimento",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  arrendamento_escritorio: {
+    dre: "arrendamento não habitacional escritório NRAU",
+    dgsi: "acórdão arrendamento escritório não habitacional",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  arrendamento_armazem: {
+    dre: "arrendamento industrial armazém não habitacional",
+    dgsi: "acórdão arrendamento armazém industrial",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  arrendamento_estacionamento: {
+    dre: "arrendamento garagem estacionamento lugar",
+    dgsi: "acórdão arrendamento garagem estacionamento",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  prestacao: {
+    dre: "prestação serviços código civil artigo 1154",
+    dgsi: "acórdão prestação serviços contrato independente",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=775&tabela=leis&ficha=1154",
+  },
+  nda: {
+    dre: "segredo negócio lei 99/2018 confidencialidade informação",
+    dgsi: "acórdão segredo negócio confidencialidade empresa",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=3169&tabela=leis",
+  },
+  compra_venda: {
+    dre: "compra venda código civil artigo 874 contrato",
+    dgsi: "acórdão compra venda bens móveis código civil",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=775&tabela=leis&ficha=874",
+  },
+  parceria: {
+    dre: "contrato sociedade parceria código civil código comercial",
+    dgsi: "acórdão parceria comercial sociedade irregular",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=524&tabela=leis",
+  },
+  trabalho: {
+    dre: "código trabalho lei 7/2009 contrato trabalho",
+    dgsi: "acórdão contrato trabalho código trabalho 2024",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1047&tabela=leis",
+  },
+  recibo_renda: {
+    dre: "recibo renda arrendamento IRS categoria F",
+    dgsi: "acórdão recibo renda arrendamento obrigação",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  recibo_caucao: {
+    dre: "caução arrendamento NRAU depósito garantia",
+    dgsi: "acórdão caução arrendamento devolução prazo",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  declaracao_entrada: {
+    dre: "estado conservação imóvel arrendamento entrega chaves",
+    dgsi: "acórdão estado imóvel arrendamento entrega",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  declaracao_saida: {
+    dre: "restituição imóvel arrendamento saída inquilino",
+    dgsi: "acórdão restituição imóvel arrendamento cessação",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  resolucao_contrato: {
+    dre: "resolução contrato arrendamento cessação NRAU denúncia",
+    dgsi: "acórdão resolução cessação arrendamento prazo aviso",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
+  pedido_caucao: {
+    dre: "devolução caução arrendamento prazo 30 dias NRAU",
+    dgsi: "acórdão devolução caução arrendamento prazo",
+    pgd: "https://www.pgdlisboa.pt/leis/lei_mostra_articulado.php?nid=1698&tabela=leis",
+  },
 };
+
+async function searchLegalSources(type, typeName) {
+  const sources = LEGAL_SOURCES[type] || {
+    dre: `${typeName} legislação Portugal`,
+    dgsi: `acórdão ${typeName} Portugal`,
+    pgd: null,
+  };
+
+  const tools = [{ type: "web_search_20250305", name: "web_search" }];
+  const results = {};
+
+  // Search 1 — DRE (official legislation)
+  try {
+    const dreRes = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 600,
+      tools,
+      messages: [{
+        role: "user",
+        content: `Pesquisa no site dre.pt: "${sources.dre}". Encontra a legislação portuguesa mais recente e relevante. Resume os artigos e diplomas mais importantes, incluindo números de lei e datas. Sê preciso e conciso.`
+      }]
+    });
+    results.legislation = dreRes.content.filter(b => b.type === "text").map(b => b.text).join("\n");
+  } catch (e) {
+    results.legislation = "";
+  }
+
+  // Search 2 — DGSI (jurisprudence)
+  try {
+    const dgsiRes = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 600,
+      tools,
+      messages: [{
+        role: "user",
+        content: `Pesquisa no site dgsi.pt: "${sources.dgsi}". Encontra acórdãos recentes relevantes dos tribunais portugueses. Resume as decisões mais importantes e os princípios jurídicos estabelecidos. Inclui referências dos acórdãos se possível.`
+      }]
+    });
+    results.jurisprudence = dgsiRes.content.filter(b => b.type === "text").map(b => b.text).join("\n");
+  } catch (e) {
+    results.jurisprudence = "";
+  }
+
+  // Search 3 — PGD Lisboa (legal text)
+  if (sources.pgd) {
+    try {
+      const pgdRes = await client.messages.create({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 600,
+        tools,
+        messages: [{
+          role: "user",
+          content: `Pesquisa em pgdlisboa.pt os artigos legais mais relevantes para ${typeName}. Resume os artigos chave e os seus requisitos legais essenciais.`
+        }]
+      });
+      results.legalText = pgdRes.content.filter(b => b.type === "text").map(b => b.text).join("\n");
+    } catch (e) {
+      results.legalText = "";
+    }
+  }
+
+  return results;
+}
 
 export async function POST(req) {
   try {
     const { type, fields, lang = "pt" } = await req.json();
     const typeName = TYPE_NAMES[lang]?.[type] || TYPE_NAMES.pt[type] || type;
+    const typeNamePt = TYPE_NAMES.pt[type] || type;
     const fieldText = Object.entries(fields).map(([k, v]) => `${k}: ${v}`).join("\n");
-    const legalQuery = LEGAL_QUERIES[type] || `legislação ${type} Portugal 2024`;
 
-    // Step 1 — search for current legislation (always in Portuguese)
-    const searchResponse = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1000,
-      tools: [{ type: "web_search_20250305", name: "web_search" }],
-      messages: [{ role: "user", content: `Pesquisa na web: "${legalQuery}". Resume em 3-5 pontos as regras legais mais importantes e actuais em Portugal para este tipo de documento. Sê conciso e preciso.` }]
-    });
+    // Search legal sources in parallel
+    const legalSources = await searchLegalSources(type, typeNamePt);
 
-    const legalContext = searchResponse.content
-      .filter(b => b.type === "text").map(b => b.text).join("\n");
+    const legalContext = `
+=== LEGISLAÇÃO OFICIAL (DRE.PT) ===
+${legalSources.legislation || "Não disponível"}
 
-    // Step 2 — generate contract in chosen language
+=== JURISPRUDÊNCIA (DGSI.PT - TRIBUNAIS PORTUGUESES) ===
+${legalSources.jurisprudence || "Não disponível"}
+
+=== ARTIGOS LEGAIS (PGDLISBOA.PT) ===
+${legalSources.legalText || "Não disponível"}
+    `.trim();
+
     const langInstruction = lang === "en"
-      ? `Generate the document in English. The document must comply with Portuguese law but be written entirely in English, as it is intended for expats living in Portugal.`
-      : `Gera o documento em português europeu (Portugal).`;
+      ? `Generate the document in English. The document must comply with Portuguese law but be written entirely in English for expats living in Portugal. Include a references section at the end citing the Portuguese legal sources consulted.`
+      : `Gera o documento em português europeu (Portugal). Inclui no final do documento uma secção "Referências Legais" com as fontes consultadas (legislação e jurisprudência relevante encontrada).`;
 
     const contractResponse = await client.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 2000,
-      messages: [{ role: "user", content: `You have access to the following updated legal information about ${typeName} in Portugal:\n\n${legalContext}\n\n---\n\nBased on this legal information, generate a professional and legally correct ${typeName}.\n\n${langInstruction}\n\nData provided:\n${fieldText}\n\nThe document must:\n- Comply with the most recent Portuguese legislation\n- Include all essential clauses, numbered\n- Have proper legal format\n- Include date in Lisbon and signature spaces\n- Be complete, formal and ready to use\n\nRespond only with the document text, no introduction or explanations.` }]
+      max_tokens: 2500,
+      messages: [{
+        role: "user",
+        content: `Tens acesso às seguintes fontes jurídicas oficiais portuguesas consultadas especificamente para este documento:
+
+${legalContext}
+
+---
+
+Com base nestas fontes jurídicas oficiais, gera um ${typeNamePt} profissional e juridicamente rigoroso.
+
+${langInstruction}
+
+Dados fornecidos:
+${fieldText}
+
+O documento deve:
+- Basear-se EXPLICITAMENTE na legislação e jurisprudência consultada acima
+- Incluir todas as cláusulas essenciais, numeradas
+- Ter formato legal adequado
+- Incluir data em Lisboa e espaços para assinatura
+- Ser completo, formal e pronto a usar
+- Terminar com uma secção "Referências Legais" que cita os diplomas e acórdãos consultados
+
+Responde apenas com o texto do documento.`
+      }]
     });
 
     const fullContract = contractResponse.content
       .filter(b => b.type === "text").map(b => b.text).join("\n");
 
-    // Step 3 — store in Redis (24h TTL)
+    // Store in Redis (24h TTL)
     const docId = `doc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     await redis.set(docId, fullContract, { ex: 86400 });
 
-    // Step 4 — return preview only
+    // Return preview only (first 35%)
     const lines = fullContract.split("\n");
     const cutoff = Math.max(4, Math.floor(lines.length * 0.35));
     const preview = lines.slice(0, cutoff).join("\n");
@@ -110,8 +268,8 @@ export async function POST(req) {
   } catch (err) {
     console.error(err);
     if (err?.status === 529) {
-      return Response.json({ error: lang === "en" ? "Service temporarily overloaded. Please try again in 30 seconds." : "Serviço temporariamente sobrecarregado. Tenta novamente em 30 segundos." }, { status: 503 });
+      return Response.json({ error: "Serviço temporariamente sobrecarregado. Tenta novamente em 30 segundos." }, { status: 503 });
     }
-    return Response.json({ error: lang === "en" ? "Error generating document." : "Erro ao gerar documento." }, { status: 500 });
+    return Response.json({ error: "Erro ao gerar documento." }, { status: 500 });
   }
 }
