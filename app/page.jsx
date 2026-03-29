@@ -7,15 +7,15 @@ const T = {
   pt: {
     tagline: "Contratos Profissionais",
     tagline2: "em 30 segundos.",
-    sub: "Gera contratos juridicamente sólidos para Portugal com IA. Sempre actualizados com a legislação em vigor. Sem advogados. Sem complicações.",
+    sub: "Contratos gerados a partir da lei actual — DRE, acórdãos dos tribunais e Código Civil. Não são templates. São documentos com fontes jurídicas reais citadas.",
     cta: "Criar Documento →",
     price: "2,99€/doc · 7,99€/mês ilimitado",
     stat1: "Tipos de Documento", stat2: "Tempo de Geração", stat3: "Lei Portuguesa",
-    aiBanner: "Contratos que acompanham a lei",
-    aiBannerText: "Antes de gerar cada documento, a nossa IA pesquisa automaticamente a legislação portuguesa mais recente — NRAU, Código do Trabalho, Código Civil — garantindo que o teu contrato reflecte sempre as regras em vigor. Não usamos modelos estáticos.",
-    f1t: "Juridicamente sólido", f1d: "Todas as cláusulas essenciais incluídas automaticamente.",
-    f2t: "Sempre actualizado", f2d: "A IA verifica a legislação actual antes de cada geração.",
-    f3t: "Pronto em 30 segundos", f3d: "Preenches os dados, a IA redige o documento completo.",
+    aiBanner: "Não são templates. São contratos gerados a partir da lei.",
+    aiBannerText: "Antes de redigir cada documento, a nossa IA consulta três fontes jurídicas oficiais: o Diário da República (DRE.PT), a base de acórdãos dos tribunais portugueses (DGSI.PT) e os artigos legais actualizados (PGDLisboa.PT). O resultado é um contrato que reflecte a lei em vigor — com referências reais no final do documento.",
+    f1t: "Fontes jurídicas oficiais", f1d: "DRE.pt · DGSI.pt · PGDLisboa.pt — consultados antes de cada geração.",
+    f2t: "Jurisprudência real", f2d: "Acórdãos dos tribunais portugueses incorporados no documento.",
+    f3t: "Referências no documento", f3d: "Cada contrato cita os diplomas e acórdãos em que se baseia.",
     f4t: "A partir de 2,99€", f4d: "O que um advogado cobra 200€, aqui custa 2,99€.",
     chooseDoc: "Que documento precisas?",
     chooseSub: "Escolhe o tipo e nós tratamos do resto.",
@@ -42,15 +42,15 @@ const T = {
   en: {
     tagline: "Professional Contracts",
     tagline2: "in 30 seconds.",
-    sub: "Generate legally sound contracts for Portugal with AI. Always updated with current legislation. No lawyers. No hassle.",
+    sub: "Contracts generated from actual Portuguese law — Official Gazette, court rulings and Civil Code. Not templates. Real legal sources cited in every document.",
     cta: "Create Document →",
     price: "€2.99/doc · €7.99/month unlimited",
     stat1: "Document Types", stat2: "Generation Time", stat3: "Portuguese Law",
-    aiBanner: "Contracts that keep up with the law",
-    aiBannerText: "Before generating each document, our AI automatically searches the latest Portuguese legislation — NRAU, Labour Code, Civil Code — ensuring your contract always reflects current rules. No static templates.",
-    f1t: "Legally sound", f1d: "All essential clauses included automatically.",
-    f2t: "Always updated", f2d: "AI verifies current legislation before each generation.",
-    f3t: "Ready in 30 seconds", f3d: "Fill in your details, the AI drafts the complete document.",
+    aiBanner: "Not templates. Contracts built from actual law.",
+    aiBannerText: "Before drafting each document, our AI consults three official Portuguese legal sources: the Official Gazette (DRE.PT), the national courts database (DGSI.PT), and updated legal articles (PGDLisboa.PT). Every contract reflects current law — with real references cited at the end of the document.",
+    f1t: "Official legal sources", f1d: "DRE.pt · DGSI.pt · PGDLisboa.pt — consulted before every generation.",
+    f2t: "Real jurisprudence", f2d: "Actual Portuguese court rulings incorporated into every document.",
+    f3t: "References included", f3d: "Every contract cites the laws and rulings it is based on.",
     f4t: "From €2.99", f4d: "What a lawyer charges €200 for, here it costs €2.99.",
     chooseDoc: "What document do you need?",
     chooseSub: "Choose the type and we'll handle the rest.",
@@ -508,7 +508,7 @@ export default function Home() {
               ))}
             </div>
           )}
-          <a href="https://instagram.com/contratoja.pt" target="_blank" style={{marginRight:8, display:"flex", alignItems:"center"}}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a><button className={`lang-btn ${lang === "pt" ? "active" : ""}`} onClick={() => switchLang("pt")}>PT</button>
+          <button className={`lang-btn ${lang === "pt" ? "active" : ""}`} onClick={() => switchLang("pt")}>PT</button>
           <button className={`lang-btn ${lang === "en" ? "active" : ""}`} onClick={() => switchLang("en")}>EN</button>
         </div>
       </header>
@@ -533,13 +533,28 @@ export default function Home() {
               </div>
             </div>
 
-            <div style={{ background: "linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03))", border: "1px solid rgba(201,168,76,0.25)", padding: "36px 40px", marginBottom: 64 }}>
-              <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
-                <div style={{ fontSize: 36 }}>🧠</div>
-                <div style={{ flex: 1, minWidth: 240 }}>
-                  <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 22, marginBottom: 10, color: "#c9a84c" }}>{t.aiBanner}</h3>
-                  <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 17, color: "#8a7f6e", lineHeight: 1.7, margin: 0 }}>{t.aiBannerText}</p>
+            <div style={{ background: "linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03))", border: "1px solid rgba(201,168,76,0.25)", padding: "40px 44px", marginBottom: 32 }}>
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ display: "inline-block", background: "rgba(201,168,76,.15)", border: "1px solid rgba(201,168,76,.4)", padding: "4px 14px", fontSize: 11, letterSpacing: 2, color: "#c9a84c", fontFamily: "'Crimson Pro',serif", marginBottom: 16 }}>
+                  {lang === "pt" ? "METODOLOGIA" : "METHODOLOGY"}
                 </div>
+                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: 26, marginBottom: 14, color: "#e8e0d0" }}>{t.aiBanner}</h3>
+                <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 17, color: "#8a7f6e", lineHeight: 1.75, margin: 0, maxWidth: 680 }}>{t.aiBannerText}</p>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12, marginTop: 28 }}>
+                {[
+                  { name: "DRE.PT", desc: lang === "pt" ? "Diário da República\nLegislação oficial em vigor" : "Official Gazette\nCurrent legislation", icon: "📜" },
+                  { name: "DGSI.PT", desc: lang === "pt" ? "Ministério da Justiça\nAcórdãos dos tribunais" : "Ministry of Justice\nCourt rulings database", icon: "⚖️" },
+                  { name: "PGDLISBOA.PT", desc: lang === "pt" ? "PGD Lisboa\nArtigos legais actualizados" : "PGD Lisbon\nUpdated legal articles", icon: "📖" },
+                ].map(src => (
+                  <div key={src.name} style={{ background: "rgba(13,17,23,0.6)", border: "1px solid rgba(201,168,76,0.2)", padding: "18px 20px", display: "flex", gap: 14, alignItems: "flex-start" }}>
+                    <div style={{ fontSize: 22, marginTop: 2 }}>{src.icon}</div>
+                    <div>
+                      <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#c9a84c", fontWeight: 700, marginBottom: 4 }}>{src.name}</div>
+                      <div style={{ fontFamily: "'Crimson Pro',serif", fontSize: 13, color: "#555", lineHeight: 1.5, whiteSpace: "pre-line" }}>{src.desc}</div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -638,7 +653,7 @@ export default function Home() {
 
       <footer style={{ borderTop: "1px solid #1a1a1a", padding: "24px 40px", textAlign: "center" }}>
         <p style={{ fontFamily: "'Crimson Pro',serif", fontSize: 13, color: "#aaa" }}>
-          ContratoJá © 2026 · geral@contratoja.pt · <a href="https://instagram.com/contratoja.pt" target="_blank" style={{color:"#c9a84c", textDecoration:"none"}}>@contratoja.pt</a> · {t.footer}
+          ContratoJá © 2026 · geral@contratoja.pt · {t.footer}
         </p>
       </footer>
     </div>
